@@ -2,9 +2,9 @@ import Foundation
 import Fluent
 import Vapor
 
-final class Comp: Model, Content {
+final class Isps: Model, Content {
     
-    static let schema = "isps"
+    static let schema = "isps_names"
     
     @ID(key: .id) // primary key
     var id: UUID?
@@ -13,14 +13,14 @@ final class Comp: Model, Content {
     var name: String
     
     @Field(key: "contact_info") // Add this line to define the "rate" column
-    var rate: Int // Change the type to match your requirements
+    var contact_info: String // Change the type to match your requirements
     
     init() {}
     
-    init(id: UUID? = nil, name: String, rate: Int) { // Add the "rate" parameter to the initializer
+    init(id: UUID? = nil, name: String, contact_info: String) { // Add the "rate" parameter to the initializer
         self.id = id
         self.name = name
-        self.rate = rate // Initialize the "rate" property
+        self.contact_info = contact_info // Initialize the "rate" property
     }
     
 }
