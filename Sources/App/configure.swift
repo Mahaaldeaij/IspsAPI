@@ -8,6 +8,7 @@ public func configure(_ app: Application) async throws {
     // uncomment to serve files from /Public folder
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
+    //connection with Database
     app.databases.use(.postgres(hostname: "localhost",username: "postgres",password: "",database: "best_isp"), as: .psql)
     
     
