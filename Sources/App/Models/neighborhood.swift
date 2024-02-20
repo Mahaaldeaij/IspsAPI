@@ -23,7 +23,7 @@ final class neighborhood: Model, Content {
     
     init() {}
     
-    init(id: UUID? = nil, name: String, City: String) { // Add the parameter to the initializer
+    init(id: UUID? = nil, name: String, City: String) {
         self.id = id
         self.name = name
         self.City = City

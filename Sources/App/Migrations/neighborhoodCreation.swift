@@ -14,7 +14,7 @@ struct neighborhoodCreationMigration: AsyncMigration{
         try await database.schema("neighborhood")
             
             .id()
-            .field("name", .string)
+            .field("name", .string )
             .field("City", .string)
             .create()
     }
