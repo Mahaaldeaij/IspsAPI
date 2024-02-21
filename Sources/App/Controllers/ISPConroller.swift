@@ -1,17 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Maha on 09/08/1445 AH.
-//
-
-//
-//  File.swift
-//
-//
-//  Created by Maha on 09/08/1445 AH.
-//
-
 
 //
 //  File.swift
@@ -25,46 +11,62 @@ import Vapor
 
 
 struct ISPConroller: RouteCollection{
-    func boot(routes: Vapor.RoutesBuilder) throws {
+    func boot(routes: RoutesBuilder) throws {
         
-        let ISPs = routes.grouped("ISPs")
+        let Isps = routes.grouped("Isps")
         
-        ISPs.post(use:create)
-        ISPs.get(use:read)
-        ISPs.get("id", use:readById)
-        ISPs.put(use:update)
-        ISPs.delete("id:", use:delete)
+        Isps.post(use:create)
+        Isps.get(use:index)
+        Isps.get(":id", use: getISPByID)
+        Isps.put(use:update)
+        Isps.delete(":id", use: delete)
         
     }
     
-    
-    //Create
-    func create(req: Request) async throws -> String{
-        return "New ISP Created"
+    //POST
+    func create (req: Request)throws-> EventLoopFuture<Isps>{
+        let Isps = try req.content.decode(Isps.self)
+        return Isps.create(on: req.db).map{Isps}
+        
     }
+    /*
+     func index (req: Request)throws-> [Plant]{
+     }*/
     
-    // read
+    //GET
+    func index(req: Request) throws -> EventLoopFuture<[Isps]>{
     
-    func read(req: Request) async throws -> String{
-        return "All ISPs displayed"
+        Isps.query(on: req.db).all()
     }
+ 
     
-    //read by Id
-    func readById(req: Request) async throws -> String{
-        return "All ISPs displayed by ID"
+    // read or GET by ID
+    func getISPByID(req: Request) throws -> EventLoopFuture<Isps>{
+        return Isps.find(req.parameters.get("id"), on: req.db)
+            .unwrap(or: Abort(.notFound))
+        
     }
+ 
     
     //Update
-    func update(req: Request) async throws -> String{
-     
-        return "Update ISP "
+    func update(req: Request) throws -> EventLoopFuture<HTTPStatus>{
+        let newIsp = try req.content.decode(Isps.self)
+        return Isps.find(newIsp.id, on: req.db)
+            .unwrap(or: Abort(.notFound))
+            .flatMap{
+                $0.name = newIsp.name
+                return $0.update(on: req.db)
+                .transform(to: .ok)
+            }
     }
     
-    //Delete by ID
-    
-    func delete(req: Request) async throws -> String{
-        
-        let ISPId = req.body.string ?? "nil"
-        return "Delete ISP with ID: \(ISPId)"
+
+    //DELETE
+   
+    func delete(req: Request)throws->EventLoopFuture<HTTPStatus>{
+        return Isps.find(req.parameters.get("id"), on: req.db)
+            .unwrap(or: Abort(.notFound))
+            .flatMap {$0.delete(on: req.db)}
+            .transform(to: .ok)
     }
-}
+   }

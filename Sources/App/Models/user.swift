@@ -20,14 +20,14 @@ final class User: Model, Content {
     var name: String
     
     @Parent(key: "neighborid")
-       var neighborhood: neighborhood
-
-       init() {}
-
-       init(id: UUID? = nil, name: String, neighborhoodID: UUID) {
-           self.id = id
-           self.name = name
-           self.$neighborhood.id = neighborhoodID
-       }
+    var neighberhood: neighborhood
+    
+    init() {}
+    
+    init(id: UUID? = nil, name: String, neighberhoodId: UUID) {
+        self.id = id
+        self.name = name
+        self.$neighberhood.id = neighberhoodId
+    }
     
 }

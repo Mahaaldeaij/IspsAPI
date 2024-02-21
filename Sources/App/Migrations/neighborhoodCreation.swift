@@ -12,10 +12,9 @@ import Fluent
 struct neighborhoodCreationMigration: AsyncMigration{
     func prepare(on database:Database) async throws {
         try await database.schema("neighborhood")
-            
             .id()
             .field("name", .string )
-            .field("City", .string)
+            .field("city", .string)
             .create()
     }
     

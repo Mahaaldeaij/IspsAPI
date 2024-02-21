@@ -13,6 +13,9 @@ public func configure(_ app: Application) async throws {
     
     
     app.migrations.add(IspCreationMigration())
+    app.migrations.add(neighborhoodCreationMigration())
+    app.migrations.add(userCreationMigration())
+    app.migrations.add(neighborIspCreation())
     try await app.autoMigrate()
     // register routes
     try routes(app)
