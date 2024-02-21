@@ -9,9 +9,9 @@ import Foundation
 import Fluent
 import Vapor
 
-final class User: Model, Content {
+final class users: Model, Content {
     
-    static let schema = "user"
+    static let schema = "users"
     
     @ID(key: .id)
     var id: UUID?

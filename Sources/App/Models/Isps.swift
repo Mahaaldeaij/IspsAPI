@@ -15,6 +15,11 @@ final class Isps: Model, Content {
     @Field(key: "contact_info") // Add this line to define the "rate" column
     var contact_info: String // Change the type to match your requirements
     
+    
+    @Siblings(through: neighborhoodIsp.self, from: \.$Isps, to: \.$neighberhood)
+    var neighberhood: [neighborhood]
+    
+    
     init() {}
     
     init(id: UUID? = nil, name: String, contact_info: String) { // Add the "rate" parameter to the initializer

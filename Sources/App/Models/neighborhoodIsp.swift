@@ -26,7 +26,7 @@ final class neighborhoodIsp: Model, Content {
     
     init() {}
     
-    init(id: UUID? = nil, n_id: UUID, isp_id: UUID ) {
+    init(id: UUID? = nil, n_id: neighborhood.IDValue, isp_id: Isps.IDValue ) {
         self.id = id
         self.$neighberhood.id = n_id
         self.$Isps.id = isp_id

@@ -21,6 +21,9 @@ final class neighborhood: Model, Content {
     @Field(key: "City")
     var City: String 
     
+    @Siblings(through: neighborhoodIsp.self, from: \.$neighberhood, to: \.$Isps)
+    var isp: [Isps]
+    
     init() {}
     
     init(id: UUID? = nil, name: String, City: String) {
