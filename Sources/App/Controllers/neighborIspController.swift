@@ -20,6 +20,20 @@ struct neighborIspController: RouteCollection {
     }
    
     
+    func post(req: Request) async throws -> HTTPStatus {
+        let ispid = try await Isps.find(req.parameters.get("id"), on: req.db)
+        let neighborid = try await neighborhood.find(req.parameters.get("id"), on: req.db)
+        
+        guard let ispid, let neighborid else{
+            
+            throw Abort(.notFound)
+        }
+        
+        try await ispid.$neighberhood.attach(neighborid, on: req.db)
+        
+        return .ok
+    }
+    
     //CREATE
     func create(req: Request)throws -> EventLoopFuture<neighborhoodIsp> {
         let neighborIsp = try req.content.decode(neighborhoodIsp.self)
