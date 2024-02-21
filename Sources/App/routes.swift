@@ -11,7 +11,7 @@ func routes(_ app: Application) throws {
         "Hello, world!"
     }
     
-    app.get ("ISPs") { req async throws -> [ISP] in
+    /*app.get ("ISPs") { req async throws -> [ISP] in
         let ISPs: [ISP] = [.init(name: "STC", rate: "7/10"),
                            .init(name: "Mobily", rate: "5/10"),
                            .init(name: "Salam", rate: "5/10"),
@@ -43,7 +43,7 @@ func routes(_ app: Application) throws {
     ]
     return neighberhoods
  
-    }
+    }*/
     
 }
 

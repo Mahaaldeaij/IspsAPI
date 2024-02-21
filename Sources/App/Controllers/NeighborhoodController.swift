@@ -1,62 +1,57 @@
-//
-//  File.swift
-//  
-//
-//  Created by Maha on 09/08/1445 AH.
-//
 
-//
-//  File.swift
-//
-//
-//  Created by Basmah Ali on 08/08/1445 AH.
-//
+
 
 import Foundation
 import Vapor
 
 struct NeighborhoodController: RouteCollection{
-    func boot(routes: Vapor.RoutesBuilder) throws {
+    func boot(routes: RoutesBuilder) throws {
         
-        let Neighborhoods = routes.grouped("Neighborhoods")
+        let neighborhood = routes.grouped("neighborhood")
         
-        Neighborhoods.post(use:create)
-        Neighborhoods.get(use:read)
-        Neighborhoods.get(":id", use:getById)
-        Neighborhoods.put(use:update)
-        Neighborhoods.delete(":id", use:delete)
+        neighborhood.post(use:create)
+        neighborhood.get(use:read)
+        neighborhood.get(":id", use:getById)
+        neighborhood.put(use:update)
+        neighborhood.delete(":id", use:delete)
       
     }
     
-    
     //Create
-    func create(req: Request) async throws -> String{
-        return "New Neighborhood Created"
+    func create(req: Request)throws -> EventLoopFuture<neighborhood> {
+        let neighborhood = try req.content.decode(neighborhood.self)
+        return neighborhood.create(on: req.db).map{neighborhood}
+    }
+ 
+    // GET
+    
+    func read(req: Request)  throws -> EventLoopFuture<[neighborhood]>{
+        neighborhood.query(on: req.db).all()
+    }
+ 
+    
+    //UPDATE
+    func update(req: Request) throws -> EventLoopFuture<HTTPStatus>{
+        let newneighborhood = try req.content.decode(neighborhood.self)
+        return neighborhood.find(newneighborhood.id, on: req.db)
+            .unwrap(or: Abort(.notFound))
+            .flatMap{$0.name = newneighborhood.name
+                return $0.update(on: req.db)
+                .transform(to: .ok)}
+    }
+  
+    //GET by ID
+    func getById(req: Request) throws -> EventLoopFuture<neighborhood>{
+        return neighborhood.find(req.parameters.get("id"), on: req.db)
+            .unwrap(or: Abort(.notFound))
     }
     
-    // read
+    //DELETE
     
-    func read(req: Request) async throws -> String{
-        return "All Neighborhood displayed"
-    }
-    
-    //Update
-    func update(req: Request) async throws -> String{
-        //let NeighborhoodID = req.body.string ?? "nil"
-        return "Update Neighborhood "
-    }
-    
-    //Get by ID
-    func getById(req: Request) async throws -> String{
-        let NeighborhoodID = req.body.string ?? "nil"
-        return "All Neighborhood displayed by ID "
-    }
-    
-    //Delete by ID
-    
-    func delete(req: Request) async throws -> String{
-        
-        let NeighborhoodID = req.body.string ?? "nil"
-        return "Delete Neighborhood with ID: \(NeighborhoodID)"
+    func delete(req: Request) throws -> EventLoopFuture<HTTPStatus>{
+        return neighborhood.find(req.parameters.get("id"), on: req.db)
+            .unwrap(or: Abort(.notFound))
+            .flatMap {$0.delete(on: req.db)}
+            .transform(to: .ok)
     }
 }
