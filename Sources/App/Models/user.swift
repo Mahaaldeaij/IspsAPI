@@ -19,15 +19,15 @@ final class User: Model, Content {
     @Field(key: "name")
     var name: String
     
-    @Field(key: "neighborid")
-    var neighberhood: UUID
-    
-    init() {}
-    
-    init(id: UUID? = nil, name: String, neighberhood: UUID) {
-        self.id = id
-        self.name = name
-        self.neighberhood = neighberhood
-    }
+    @Parent(key: "neighborid")
+       var neighborhood: neighborhood
+
+       init() {}
+
+       init(id: UUID? = nil, name: String, neighborhoodID: UUID) {
+           self.id = id
+           self.name = name
+           self.$neighborhood.id = neighborhoodID
+       }
     
 }
